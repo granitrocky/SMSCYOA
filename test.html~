@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ITRexus</title>
+<style type="text/css">
+
+#container {
+	height: 100%;
+	width: 80%;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 16px;
+	background-color: #F1F9FF;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	overflow: hidden;
+}
+#banner {
+	font-family: Verdana, Geneva, sans-serif;
+	width: 332px;
+	font-size: 16px;
+	background-color: #F1F8FE;
+}
+#body_column {
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	background-color: #F1F9FF;
+}
+div.body_column:first-line {color: #517d62; font-weight:bold;}
+#main_splash {
+	width: 500px;
+	float: none;
+	margin-left: 5px;
+	background-color: #066;
+	background-image: none;
+	display: inline;
+}#header_link {
+	margin-top: 25px;
+	margin-left: 45px;
+	font-family: "Myriad Pro", Geneva, sans-serif;
+	font-size: 20px;
+	font-weight: lighter;
+	text-transform: capitalize;
+	color: #00300C;
+	text-align: center;
+	vertical-align: middle;
+	float: left;
+	cursor: pointer;
+}a:link {
+	text-decoration: none;
+	color: #00300C;
+}
+a:visited {
+	text-decoration: none;
+	color: #00300C;
+}
+a:hover {
+	text-decoration: none;
+	color: #00300C;
+}
+a:active {
+	text-decoration: none;
+	color: #00300C;
+}
+
+</style>
+</head>
+
+<body>
+
+<div align="center">
+<div id="container">
+  <div id="banner" class="center">
+	 <img src="strongbox_itrexuslogo.jpg"><br>
+ 	 <div id="header_link"><a href="index.html">Home</a></div> 
+ 	 <div id="header_link"><a href="inbox.html" title="Inbox">Inbox</a></div> 
+ 	 <div id="header_link"><a href="outbox.html" title="Outbox">Outbox</a></div>
+  </div>
+ 	 <br><br>
+  <div style="width: 600px; margin-bottom: 150px;" class="center"><img src="Line.jpg" ><br></div>
+  
+<p align="left">Showing Orders Processed Within The Last <b>24 Hours</b></p>
+<br /><br />
+<div style="width: 100%">
+<div class="body_column" style="width: 600px;">
+Inbound
+<p>
+<?php
+if ($db = new SQLite3('/usr/local/lib/python2.6/dist-packages/bots/botssys/sqlitedb/botsdb')) { 
+    $result = $db->query("select * from ta where status=320 and idroute='X12_Server';");
+	 echo '<table border="1">';
+		echo "<tr>";
+		echo	"<td><b>Trading Partner Name</b></td>";
+		echo	"<td><b>Document Type</b></td>";
+		echo	"<td><b>Trading Partner ID</b></td>";
+		echo	"<td><b>Receiver ID</b></td>";
+		echo	"<td><b>Date / Time</b></td>";
+		echo	"<td><b>Set Code</b></td>";
+		echo	"<td><b>Standard</b></td>";
+		echo "</tr>";
+    	while ($row = $result->fetchArray()) { if ($row[7]<>$prevfilename){
+			$prevfilename=$row[7];				
+		$i=1;
+		$file_handle = fopen("/usr/local/lib/python2.6/dist-packages/bots/botssys/data/" . floor($row[7]/1000) . "/$row[7]", "rb");
+		if (time()-(60*24)<mktime(substr($row[27],11,2),substr($row[27],14,2),substr($row[27],17,2),substr($row[27],5,2),substr($row[27],8,2),substr($row[27],0,4))){	
+			while (!feof($file_handle) ) {
+				$line_of_text = fgets($file_handle);
+				if ($i==1){
+					$delim = substr($line_of_text, 3, 1);
+				}
+				$l=strpos($line_of_text, $delim);
+				$segname = substr($line_of_text, 0, $l);
+				${"_" . "$i"} = explode($delim, $line_of_text);
+				$lastindex = end(${"_" . "$i"});
+				${"_" . "$i"}[key(${"_" . "$i"})] = substr($lastindex, 0, strlen($lastindex)-2);
+				reset(${"_" . "$i"});
+				$i=$i+1;
+			}
+			for ($l=0; $l<=$i; $l++){
+				if (${"_" . $l}[0] == 'GE'){
+					$totalLines=$l;
+					echo "<tr>";
+					echo	"<td>" . FindSegment('ISA', 6) . "</td>";
+					echo	"<td>" . FindSegment('GS', 1) . "</td>";
+					echo	"<td>" . FindSegment('GS', 2) . "</td>";
+					echo	"<td>" . FindSegment('GS', 3) . "</td>";
+					echo	"<td>" . $row[27] . "</td>";
+					echo	"<td>" . FindSegment('GS', 6) . "</td>";
+					echo	"<td>" . FindSegment('GS', 8) . "</td>";
+					echo "</tr>"; 
+				}
+			  }
+	  		}}
+	 }
+	 
+	 
+	 echo "</table><br><br><br>";
+	 sqlite_close($db);
+	 
+	 
+} else {
+    die($sqliteerror);
+}
+
+
+function FindSegment($seg, $code, $qual = 0, $qualCode = '', $envVal=0){
+	global $totalLines;
+	for ($l=$totalLines; $l > $envVal; $l--){
+		global ${"_" . $l};
+		if (${"_" . $l}[0] == $seg){
+			if($qual>0){
+				if (${"_" . $l}[$qual] == $qualCode){
+					 return (${"_" . $l}[$code]);
+				}
+			} else {
+				return (${"_" . $l}[$code]);
+			}
+		}	
+	}
+}
+?>
+</div>
+
+<!-- ------------------------------------------------------------------- -->
+
+<div class="body_column" style="width: 600px;">
+Outbound
+<p>
+<?php
+if ($db = new SQLite3('/usr/local/lib/python2.6/dist-packages/bots/botssys/sqlitedb/botsdb')) { 
+    $result = $db->query("select * from ta where status=320 and idroute='X12_Validation';");
+	 echo '<table border="1">';
+		echo "<tr>";
+		echo	"<td><b>Trading Partner Name</b></td>";
+		echo	"<td><b>Document Type</b></td>";
+		echo	"<td><b>Trading Partner ID</b></td>";
+		echo	"<td><b>Receiver ID</b></td>";
+		echo	"<td><b>Date / Time</b></td>";
+		echo	"<td><b>Set Code</b></td>";
+		echo	"<td><b>Standard</b></td>";
+		echo "</tr>";
+    	while ($row = $result->fetchArray()) { if ($row[7]<>$prevfilename){
+			$prevfilename=$row[7];				
+		$i=1;
+		$file_handle = fopen("/usr/local/lib/python2.6/dist-packages/bots/botssys/data/" . floor($row[7]/1000) . "/$row[7]", "rb");
+		if (time()-(60*24)<mktime(substr($row[27],11,2),substr($row[27],14,2),substr($row[27],17,2),substr($row[27],5,2),substr($row[27],8,2),substr($row[27],0,4))){	
+			while (!feof($file_handle) ) {
+				$line_of_text = fgets($file_handle);
+				if ($i==1){
+					$delim = substr($line_of_text, 3, 1);
+				}
+				$l=strpos($line_of_text, $delim);
+				$segname = substr($line_of_text, 0, $l);
+				${"_" . "$i"} = explode($delim, $line_of_text);
+				$lastindex = end(${"_" . "$i"});
+				${"_" . "$i"}[key(${"_" . "$i"})] = substr($lastindex, 0, strlen($lastindex)-2);
+				reset(${"_" . "$i"});
+				$i=$i+1;
+			}
+			for ($l=0; $l<=$i; $l++){
+				if (${"_" . $l}[0] == 'GE'){
+					$totalLines=$l;
+					echo "<tr>";
+					echo	"<td>" . FindSegment('ISA', 6) . "</td>";
+					echo	"<td>" . FindSegment('GS', 1) . "</td>";
+					echo	"<td>" . FindSegment('GS', 2) . "</td>";
+					echo	"<td>" . FindSegment('GS', 3) . "</td>";
+					echo	"<td>" . $row[27] . "</td>";
+					echo	"<td>" . FindSegment('GS', 6) . "</td>";
+					echo	"<td>" . FindSegment('GS', 8) . "</td>";
+					echo "</tr>"; 
+				}
+			  }
+	  		}}
+	 }
+	 
+	 
+	 echo "</table><br><br><br>";
+	 sqlite_close($db);
+	 
+	 
+} else {
+    die($sqliteerror);
+}
+?></p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

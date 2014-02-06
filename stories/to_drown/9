@@ -1,0 +1,5 @@
+Text='You attempt to yell, but produce only a harsh rasp, which leaves you even more thirsty.'
+Ops='<feel GROUND> <feel WALLS> <WAIT>'
+GROUND=2
+WALLS=3
+WAIT=6

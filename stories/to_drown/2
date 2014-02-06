@@ -1,0 +1,5 @@
+Text='The ground is damp. There are scarce stone blocks protruding from the cold dirt. As you move around the room, your hand finds a small puddle of muddy water.'
+Ops='<YELL> <SIP water> <feel WALLS>'
+YELL=5
+WALLS=3
+SIP=4

@@ -1,0 +1,5 @@
+Text='You attempt to shout, but produce only a harsh rasp.'
+Ops='<WAIT> <SIP water> <feel WALLS>'
+SIP=8
+WAIT=6
+WALLS=3

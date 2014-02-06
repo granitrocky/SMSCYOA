@@ -1,0 +1,1 @@
+sqlite3 playerdb "UPDATE players SET progress='0' WHERE playerID='000001';"

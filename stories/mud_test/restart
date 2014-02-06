@@ -1,0 +1,9 @@
+Text='Are You Sure?'
+yes='$(sqlite3 playerdb/playerdb "update players SET progress='0' WHERE playerID='$playerID';";
+sqlite3 playerdb/playerdb "update players SET lastchoice='' WHERE playerID='$playerID';";
+sqlite3 playerdb/playerdb "update players SET seen='0' WHERE playerID='$playerID';")'
+if [ $seen -eq 1 ]; then
+	if [ $choice != 'yes' ]; then
+		eval $choice=$1
+	fi
+fi

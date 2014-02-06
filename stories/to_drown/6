@@ -1,0 +1,5 @@
+Text='You wait for what seems like an eternity, but nothing seems to happen.'
+Ops='<YELL> <feel GROUND> <feel WALLS>'
+YELL=9
+GROUND=2
+WALLS=3

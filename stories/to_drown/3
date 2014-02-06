@@ -1,0 +1,7 @@
+Text='You stand to your feet and begin to let your fingers follow the walls, which are very cold stone.'
+Ops='<feel GROUND> <LISTEN> <WAIT> <YELL> <CONTINUE feeling>'
+GROUND=2
+WAIT=6
+LISTEN=7
+YELL=9
+CONTINUE=10

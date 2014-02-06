@@ -1,0 +1,2 @@
+blah='echo "Help Me" | sed -e {s/Help/Bleh/}'
+halp='source help; echo "$bleh"'

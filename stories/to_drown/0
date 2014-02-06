@@ -1,0 +1,6 @@
+Text='Musk fills the air. You have no recollection of how you got to this dark and solitary place. You hear dripping and smell earth, but see nothing.'
+Ops='<YELL> <feel GROUND> <feel WALLS> <WAIT>'
+YELL=1
+GROUND=2
+WALLS=3
+WAIT=6

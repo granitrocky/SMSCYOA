@@ -1,0 +1,5 @@
+Text='Yes or No?'
+Opts=('YES' 'NO')
+YES=1
+NO=2
+MAYBE="ATTACK 0"

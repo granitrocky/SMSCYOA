@@ -1,0 +1,9 @@
+Player DB
+	FirstName, LastName, CellNumber, PlayerID, CurrentGame, Waiting
+
+Game DBs
+	playerID, ProgressFields Per Game
+
+
+Multiplayer Game DB
+	CellNumber, PlayerID, 

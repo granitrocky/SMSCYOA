@@ -1,0 +1,5 @@
+Text='You attempt to shout, but produce only a harsh rasp.'
+Ops='<feel GROUND> <feel WALLS> <WAIT>'
+GROUND=2
+WALLS=1
+WAIT=6

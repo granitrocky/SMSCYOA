@@ -1,0 +1,3 @@
+Text='What is your name?'
+Opts='Enter Your Name'
+eval $choice=1

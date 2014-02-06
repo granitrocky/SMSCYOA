@@ -1,0 +1,21 @@
+#Functions
+
+update_stats()
+{
+	#How do we do this? We first read through the list of variables, then we check which ones are defined locally, then
+	#  we write it back to the file. Cinch.
+	for line in $(cat stats)
+	do
+		uvar=`echo $line | awk -F '=' '/.*/ {print $1}'`
+		if [ -n "${!uvar}" ];then
+			string_to_write=$string_to_write`echo $line | sed -e {s/$uvar=.*/$uvar=\'${!uvar}\'/}`'\n'
+		else
+			string_to_write=${string_to_write}$line'\n'
+		fi
+	done
+	echo -ne $string_to_write > stats
+}
+
+#Technically variables, but they rely on other variables, so we're calling them functions.
+
+restart='restart '"${choice}"
